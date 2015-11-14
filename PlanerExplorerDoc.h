@@ -10,23 +10,22 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
 class CPlanerExplorerDoc : public CDocument
 {
 protected: // create from serialization only
 	CPlanerExplorerDoc();
 	DECLARE_DYNCREATE(CPlanerExplorerDoc)
 
-// Attributes
+	// Attributes
 public:
 
-// Operations
+	// Operations
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPlanerExplorerDoc)
-	public:
+	// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CPlanerExplorerDoc)
+public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 	//}}AFX_VIRTUAL
@@ -46,7 +45,7 @@ public:
 
 protected:
 
-// Generated message map functions
+	// Generated message map functions
 protected:
 	//{{AFX_MSG(CPlanerExplorerDoc)
 	//}}AFX_MSG

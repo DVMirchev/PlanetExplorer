@@ -9,28 +9,26 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
-
 class CPlanerExplorerView : public CView
 {
 protected: // create from serialization only
 	CPlanerExplorerView();
 	DECLARE_DYNCREATE(CPlanerExplorerView)
 
-// Attributes
+	// Attributes
 public:
 	CPlanerExplorerDoc* GetDocument();
 
-// Operations
+	// Operations
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPlanerExplorerView)
-	public:
+	// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CPlanerExplorerView)
+public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	protected:
+protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
@@ -46,7 +44,7 @@ public:
 
 protected:
 
-// Generated message map functions
+	// Generated message map functions
 protected:
 	bool m_bCallInitDraw;
 	int m_nTimer;
@@ -63,7 +61,9 @@ protected:
 
 #ifndef _DEBUG  // debug version in PlanerExplorerView.cpp
 inline CPlanerExplorerDoc* CPlanerExplorerView::GetDocument()
-   { return (CPlanerExplorerDoc*)m_pDocument; }
+{
+	return (CPlanerExplorerDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

@@ -13,5 +13,4 @@ public:
 	virtual void Draw(CDC* pDC, const bool& bInitDraw) = 0;
 	virtual int GetAt(const int& nX, const int& nY) const = 0;
 	virtual void SetAt(const int& nX, const int& nY, const int& nValue) = 0;
-
 };

@@ -2,7 +2,7 @@
 #include "TraceExplorer.h"
 
 CTraceExplorer::CTraceExplorer(const CPoint& ptPos, const CPoint& ptBasePos, IWorld* pWorld, const BOOL& bIsCarringResources)
-:CExplorer(ptPos, ptBasePos, pWorld, bIsCarringResources)
+	:CExplorer(ptPos, ptBasePos, pWorld, bIsCarringResources)
 {
 }
 

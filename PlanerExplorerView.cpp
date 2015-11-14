@@ -40,7 +40,6 @@ END_MESSAGE_MAP()
 CPlanerExplorerView::CPlanerExplorerView()
 {
 	m_bCallInitDraw = TRUE;
-
 }
 
 CPlanerExplorerView::~CPlanerExplorerView()
@@ -114,32 +113,31 @@ CPlanerExplorerDoc* CPlanerExplorerView::GetDocument() // non-debug version is i
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerView message handlers
 
-void CPlanerExplorerView::OnTimer(UINT nIDEvent) 
+void CPlanerExplorerView::OnTimer(UINT nIDEvent)
 {
 	OnStep();
-	
+
 	CView::OnTimer(nIDEvent);
 }
 
-void CPlanerExplorerView::OnLoop() 
+void CPlanerExplorerView::OnLoop()
 {
-   m_nTimer = SetTimer(1, 1, 0);
+	m_nTimer = SetTimer(1, 1, 0);
 }
 
-void CPlanerExplorerView::OnStep() 
+void CPlanerExplorerView::OnStep()
 {
 	((CPlanerExplorerDoc*)GetDocument())->OnStep();
 	m_bCallInitDraw = FALSE;
 	Invalidate(FALSE);
 }
 
-void CPlanerExplorerView::OnStop() 
+void CPlanerExplorerView::OnStop()
 {
-	KillTimer( m_nTimer );
-	
+	KillTimer(m_nTimer);
 }
 
-void CPlanerExplorerView::OnInit() 
+void CPlanerExplorerView::OnInit()
 {
 	srand(GetTickCount());
 	((CPlanerExplorerDoc*)GetDocument())->OnInit();
@@ -147,7 +145,7 @@ void CPlanerExplorerView::OnInit()
 	Invalidate(FALSE);
 }
 
-void CPlanerExplorerView::OnOptionsOptions() 
+void CPlanerExplorerView::OnOptionsOptions()
 {
 	COptionDialog dlgOptions(gl_nSamplesNumber, gl_nExplorerNumber);
 

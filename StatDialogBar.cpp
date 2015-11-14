@@ -14,7 +14,6 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CStatDialogBar dialog
 
-
 CStatDialogBar::CStatDialogBar()
 	: CDialogBar()
 {
@@ -24,7 +23,6 @@ CStatDialogBar::CStatDialogBar()
 	//}}AFX_DATA_INIT
 }
 
-
 void CStatDialogBar::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogBar::DoDataExchange(pDX);
@@ -33,7 +31,6 @@ void CStatDialogBar::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_AVERAGE_MOVES, m_strAverageMoves);
 	//}}AFX_DATA_MAP
 }
-
 
 BEGIN_MESSAGE_MAP(CStatDialogBar, CDialogBar)
 	//{{AFX_MSG_MAP(CStatDialogBar)

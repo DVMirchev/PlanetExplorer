@@ -8,5 +8,5 @@ public:
 	virtual bool DetectSample() = 0;
 	virtual void PickUpSample() = 0;
 	virtual void MoveToBase() = 0;
- 	virtual void Step() = 0;
+	virtual void Step() = 0;
 };

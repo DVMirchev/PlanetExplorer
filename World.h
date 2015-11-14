@@ -11,9 +11,9 @@
 
 #include "WorldBase.h"
 
-class CExplorer; 
+class CExplorer;
 
-class CWorld : public IWorld  
+class CWorld : public IWorld
 {
 public:
 
@@ -24,8 +24,7 @@ public:
 	void InitDraw(CDC* pdc) override;
 	void Draw(CDC* pDC, const bool& bInitDraw) override;
 	int GetAt(const int& nX, const int& nY) const override { return m_arrMatrix[nX][nY]; }
-	void SetAt(const int& nX, const int& nY, const int& nValue) override { m_arrMatrix[nX][nY] = nValue;}
-
+	void SetAt(const int& nX, const int& nY, const int& nValue) override { m_arrMatrix[nX][nY] = nValue; }
 
 public:
 	//void CleanWorld();
@@ -36,7 +35,7 @@ public:
 	//void Draw(CDC* pDC, BOOL bInitDraw);
 	CWorld();
 	virtual ~CWorld();
- 
+
 	int m_arrMatrix[MAX_WORLD_X][MAX_WORLD_Y];
 
 	std::vector<IExplorer*> m_vectExplorers;

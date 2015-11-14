@@ -11,7 +11,7 @@
 
 class IWorld;
 
-class CExplorer  
+class CExplorer
 {
 public:
 	CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, BOOL bIsCarringResource = FALSE);
@@ -22,7 +22,7 @@ public:
 	BOOL DetectSample();
 	void PickUpSample();
 	void MoveToBase();
- 	void Step();
+	void Step();
 
 	BOOL m_bIsCarringResource;
 	CPoint m_ptBasePos;

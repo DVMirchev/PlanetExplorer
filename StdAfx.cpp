@@ -6,5 +6,3 @@
 
 int gl_nSamplesNumber = 1000;
 int gl_nExplorerNumber = 150;
-
-
