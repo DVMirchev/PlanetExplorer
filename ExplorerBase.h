@@ -9,4 +9,7 @@ public:
 	virtual void PickUpSample() = 0;
 	virtual void MoveToBase() = 0;
 	virtual void Step() = 0;
+	virtual bool CarringResource() const = 0;
+	virtual const CPoint& GetPossition()  const = 0;
+	virtual const CPoint& GetOldPossition() const = 0;
 };

@@ -13,6 +13,8 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
+const int gl_nGridSize = 9;
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -39,8 +41,8 @@ void CWorld::Draw(CDC* pDC, const bool& bInitDraw)
 	//	pDC->TextOut(0, 0, str);
 
 	// Draw Base
-	pDC->FillSolidRect((m_ptBasePos.x + 1) * 5 + 1,
-		(m_ptBasePos.x + 1) * 5 + 1,
+	pDC->FillSolidRect((m_ptBasePos.x + 1) * gl_nGridSize + 1,
+		(m_ptBasePos.x + 1) * gl_nGridSize + 1,
 		4,
 		4,
 		RGB(255,
@@ -49,9 +51,9 @@ void CWorld::Draw(CDC* pDC, const bool& bInitDraw)
 			)
 		);
 
-	for (std::vector<CExplorer*>::iterator it = m_vectExplorers.begin(); it != m_vectExplorers.end(); it++)
+	for (const auto& Explorer : m_vectExplorers)
 	{
-		DrawExplorer(*it, pDC);
+		DrawExplorer(Explorer, pDC);
 	}
 }
 
@@ -65,10 +67,10 @@ void CWorld::InitDraw(CDC *pDC)
 		for (j = 0; j < MAX_WORLD_X; j++)
 		{
 			car = m_arrMatrix[i][j];
-			pDC->FillSolidRect((i + 1) * 5,
-				(j + 1) * 5,
-				5,
-				5,
+			pDC->FillSolidRect((i + 1) * gl_nGridSize,
+				(j + 1) * gl_nGridSize,
+				gl_nGridSize,
+				gl_nGridSize,
 				RGB(255 - 100 * car,
 					255 - 100 * car,
 					255 - 100 * car
@@ -80,47 +82,47 @@ void CWorld::InitDraw(CDC *pDC)
 	{
 		CPen pen(PS_SOLID, 1, RGB(210, 210, 210));
 		CPen* ppenOld = pDC->SelectObject(&pen);
-		pDC->MoveTo(i * 5, 5);
-		pDC->LineTo(i * 5, (MAX_WORLD_X + 1) * 5);
-		pDC->MoveTo(5, i * 5);
-		pDC->LineTo((MAX_WORLD_Y + 1) * 5, i * 5);
+		pDC->MoveTo(i * gl_nGridSize, gl_nGridSize);
+		pDC->LineTo(i * gl_nGridSize, (MAX_WORLD_X + 1) * gl_nGridSize);
+		pDC->MoveTo(gl_nGridSize, i * gl_nGridSize);
+		pDC->LineTo((MAX_WORLD_Y + 1) * gl_nGridSize, i * gl_nGridSize);
 		pDC->SelectObject(ppenOld);
 	}
 }
 
 void CWorld::Step()
 {
-	for (std::vector<CExplorer*>::iterator it = m_vectExplorers.begin(); it != m_vectExplorers.end(); it++)
+	for (const auto& Explorer : m_vectExplorers)
 	{
-		(*it)->Step();
+		Explorer->Step();
 	}
 }
 
-void CWorld::DrawExplorer(CExplorer *pExplorer, CDC *pDC)
+void CWorld::DrawExplorer(IExplorer *pExplorer, CDC *pDC)
 {
 	COLORREF clrColor;
-	if (pExplorer->m_bIsCarringResource)
+	if (pExplorer->CarringResource())
 		clrColor = RGB(0, 0, 0);
 	else
 		clrColor = RGB(0, 0, 255);
 
 	COLORREF clrUnderColor;
-	if (m_arrMatrix[pExplorer->m_ptOldPos.x][pExplorer->m_ptOldPos.y])
+	if (m_arrMatrix[pExplorer->GetOldPossition().x][pExplorer->GetOldPossition().y])
 		clrUnderColor = RGB(155, 155, 155);
 	else
 		clrUnderColor = RGB(255, 255, 255);
 
-	pDC->FillSolidRect((pExplorer->m_ptOldPos.x + 1) * 5 + 1,
-		(pExplorer->m_ptOldPos.y + 1) * 5 + 1,
-		4,
-		4,
+	pDC->FillSolidRect((pExplorer->GetOldPossition().x + 1) * gl_nGridSize + 1,
+		(pExplorer->GetOldPossition().y + 1) * gl_nGridSize + 1,
+		gl_nGridSize - 1,
+		gl_nGridSize - 1,
 		clrUnderColor
 		);
 
-	pDC->FillSolidRect((pExplorer->m_ptPos.x + 1) * 5 + 1,
-		(pExplorer->m_ptPos.y + 1) * 5 + 1,
-		4,
-		4,
+	pDC->FillSolidRect((pExplorer->GetPossition().x + 1) * gl_nGridSize + 1,
+		(pExplorer->GetPossition().y + 1) * gl_nGridSize + 1,
+		gl_nGridSize - 1,
+		gl_nGridSize - 1,
 		clrColor
 		);
 }
@@ -142,8 +144,10 @@ void CWorld::InitWorld()
 
 	for (i = 0; i < gl_nSamplesNumber; i++)
 	{
-		int XPos = (int)MAX_WORLD_X * (((float)rand()) / ((float)RAND_MAX));
-		int YPos = (int)MAX_WORLD_Y * (((float)rand()) / ((float)RAND_MAX));
+
+		// TO DO TODO DMTK use C++ random generator
+		int XPos = (int) ((int)MAX_WORLD_X * (((float)rand()) / ((float)RAND_MAX)));
+		int YPos = (int) ((int)MAX_WORLD_Y * (((float)rand()) / ((float)RAND_MAX)));
 
 		m_arrMatrix[XPos][YPos] = 1;
 	}
@@ -153,10 +157,8 @@ void CWorld::InitWorld()
 
 void CWorld::CleanWorld()
 {
-	for (std::vector<CExplorer*>::iterator it = m_vectExplorers.begin(); it != m_vectExplorers.end(); it++)
-	{
-		if (*it != NULL)
-			delete[] * it;
-	}
+	for (auto& Explorer : m_vectExplorers)
+			delete Explorer;
+
 	m_vectExplorers.clear();
 }

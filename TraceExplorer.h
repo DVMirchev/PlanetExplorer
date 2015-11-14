@@ -7,7 +7,7 @@ class CTraceExplorer :
 	public CExplorer
 {
 public:
-	CTraceExplorer(const CPoint& ptPos, const CPoint& ptBasePos, IWorld* pWorld, const BOOL& bIsCarringResources);
+	CTraceExplorer(const CPoint& ptPos, const CPoint& ptBasePos, IWorld* pWorld, const bool& bIsCarringResources);
 public:
 	virtual ~CTraceExplorer(void);
 };

@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CExplorer::CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, BOOL bIsCarringResource)
+CExplorer::CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, bool bIsCarringResource)
 {
 	m_ptBasePos = ptBasePos;
 	m_ptPos = ptPos;
@@ -87,10 +87,10 @@ void CExplorer::PickUpSample()
 	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) != 1)
 		ASSERT(FALSE);
 	m_bIsCarringResource = TRUE;
-	m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) = 0;
+	m_pWorld->SetAt(m_ptPos.x, m_ptPos.y, 0);
 }
 
-BOOL CExplorer::DetectSample()
+bool CExplorer::DetectSample()
 {
 	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) == 1)
 		return TRUE;
@@ -131,9 +131,9 @@ void CExplorer::Move()
 			m_ptPos.y += YOffset;
 			return;
 		}
-	} while ((arrXPos[0][0] == 1) && (arrXPos[1][0] == 1) && (arrXPos[2][0] == 1) &&
-		(arrXPos[0][1] == 1) && (arrXPos[1][1] == 1) && (arrXPos[2][1] == 1) &&
-		(arrXPos[0][2] == 1) && (arrXPos[1][2] == 1) && (arrXPos[2][2] == 1));
+	} while (	(arrXPos[0][0] == 1) && (arrXPos[1][0] == 1) && (arrXPos[2][0] == 1) &&
+						(arrXPos[0][1] == 1) && (arrXPos[1][1] == 1) && (arrXPos[2][1] == 1) &&
+						(arrXPos[0][2] == 1) && (arrXPos[1][2] == 1) && (arrXPos[2][2] == 1));
 
 	int XOffset = Get_M1_0_P1();
 	int YOffset = Get_M1_0_P1();

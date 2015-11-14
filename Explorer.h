@@ -8,28 +8,34 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+#include "ExplorerBase.h"
 
 class IWorld;
 
-class CExplorer
+class CExplorer	 : public IExplorer
 {
 public:
-	CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, BOOL bIsCarringResource = FALSE);
+	CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, bool bIsCarringResource = false);
+	virtual ~CExplorer();
 
-	void MakeInWorld(CPoint& pt);
+	void MakeInWorld(CPoint& pt) override;
+	void Move() override;
+	bool DetectSample() override;
+	void PickUpSample() override;
+	void MoveToBase() override;
+	void Step() override;
+	bool CarringResource() const override { return m_bIsCarringResource; }
+	const CPoint& GetPossition()  const override { return m_ptPos; }
+	const CPoint& GetOldPossition() const override {return m_ptOldPos;}
+
+private:
+
 	IWorld* m_pWorld;
-	void Move();
-	BOOL DetectSample();
-	void PickUpSample();
-	void MoveToBase();
-	void Step();
-
-	BOOL m_bIsCarringResource;
+	bool m_bIsCarringResource;
 	CPoint m_ptBasePos;
 	CPoint m_ptPos;
 	CPoint m_ptOldPos;
 
-	virtual ~CExplorer();
 
 protected:
 	BOOL AtTheBase();
