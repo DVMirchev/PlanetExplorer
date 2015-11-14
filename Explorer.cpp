@@ -94,6 +94,7 @@ bool CExplorer::DetectSample()
 {
 	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) == 1)
 		return TRUE;
+
 	return FALSE;
 }
 
