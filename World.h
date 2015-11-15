@@ -24,7 +24,7 @@ public:
 	void InitDraw(CDC* pdc) override;
 	void Draw(CDC* pDC, const bool& bInitDraw) override;
 	int GetAt(const int& nX, const int& nY) const override { return m_arrMatrix[nX][nY]; }
-	void SetAt(const int& nX, const int& nY, const int& nValue) override { m_arrMatrix[nX][nY] = nValue; }
+	void SetAt(const int& nX, const int& nY, const int& nValue) override { m_arrMatrix[nX][nY] = max( 0, nValue); }
 
 public:
 	//void CleanWorld();

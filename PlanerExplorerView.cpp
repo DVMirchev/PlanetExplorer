@@ -122,7 +122,7 @@ void CPlanerExplorerView::OnTimer(UINT nIDEvent)
 
 void CPlanerExplorerView::OnLoop()
 {
-	m_nTimer = SetTimer(1, 1, 0);
+	m_nTimer = SetTimer(1, 50, 0);
 }
 
 void CPlanerExplorerView::OnStep()
@@ -139,6 +139,7 @@ void CPlanerExplorerView::OnStop()
 
 void CPlanerExplorerView::OnInit()
 {
+	KillTimer(m_nTimer);
 	srand(GetTickCount());
 	((CPlanerExplorerDoc*)GetDocument())->OnInit();
 	m_bCallInitDraw = TRUE;

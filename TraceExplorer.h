@@ -3,8 +3,7 @@
 
 class IWorld;
 
-class CTraceExplorer :
-	public CExplorer
+class CTraceExplorer : public CExplorer
 {
 public:
 	CTraceExplorer(const CPoint& ptPos, const CPoint& ptBasePos, IWorld* pWorld, const bool& bIsCarringResources);

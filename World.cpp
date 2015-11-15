@@ -6,6 +6,7 @@
 #include "PlanerExplorer.h"
 #include "Explorer.h"
 #include "World.h"
+#include <random>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -66,15 +67,12 @@ void CWorld::InitDraw(CDC *pDC)
 	for (i = 0; i < MAX_WORLD_X; i++)
 		for (j = 0; j < MAX_WORLD_X; j++)
 		{
-			car = m_arrMatrix[i][j];
+			car = max( 0, m_arrMatrix[i][j] == 0 ? 255 : 127 - 5 * m_arrMatrix[i][j]);
 			pDC->FillSolidRect((i + 1) * gl_nGridSize,
 				(j + 1) * gl_nGridSize,
 				gl_nGridSize,
 				gl_nGridSize,
-				RGB(255 - 100 * car,
-					255 - 100 * car,
-					255 - 100 * car
-					)
+				RGB(car, car, car)
 				);
 		}
 
@@ -102,9 +100,12 @@ void CWorld::DrawExplorer(IExplorer *pExplorer, CDC *pDC)
 {
 	COLORREF clrColor;
 	if (pExplorer->CarringResource())
-		clrColor = RGB(0, 0, 0);
+		clrColor = RGB(0, 255, 0);
 	else
-		clrColor = RGB(0, 0, 255);
+		if (pExplorer->Returning())
+			clrColor = RGB(255, 0, 0);
+		else
+			clrColor = RGB(0, 0, 255);
 
 	COLORREF clrUnderColor;
 	if (m_arrMatrix[pExplorer->GetOldPossition().x][pExplorer->GetOldPossition().y])
@@ -142,14 +143,21 @@ void CWorld::InitWorld()
 		for (j = 0; j < MAX_WORLD_X; j++)
 			m_arrMatrix[i][j] = 0;
 
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(0.0, MAX_WORLD_Y);
+	
 	for (i = 0; i < gl_nSamplesNumber; i++)
 	{
 
 		// TO DO TODO DMTK use C++ random generator
-		int XPos = (int) ((int)MAX_WORLD_X * (((float)rand()) / ((float)RAND_MAX)));
-		int YPos = (int) ((int)MAX_WORLD_Y * (((float)rand()) / ((float)RAND_MAX)));
+		int XPos = (int) dist(mt);
+		int YPos = (int) dist(mt);
 
-		m_arrMatrix[XPos][YPos] = 1;
+		if ( YPos >= MAX_WORLD_Y || XPos > MAX_WORLD_X)
+			continue;
+
+		m_arrMatrix[XPos][YPos] += 30;
 	}
 
 	m_arrMatrix[m_ptBasePos.x][m_ptBasePos.y] = 2;
@@ -157,7 +165,7 @@ void CWorld::InitWorld()
 
 void CWorld::CleanWorld()
 {
-	for (auto& Explorer : m_vectExplorers)
+	for (auto Explorer : m_vectExplorers)
 			delete Explorer;
 
 	m_vectExplorers.clear();

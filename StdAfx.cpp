@@ -4,5 +4,5 @@
 
 #include "stdafx.h"
 
-int gl_nSamplesNumber = 1000;
-int gl_nExplorerNumber = 150;
+int gl_nSamplesNumber = 100;
+int gl_nExplorerNumber = 20;

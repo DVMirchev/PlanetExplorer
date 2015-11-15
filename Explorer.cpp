@@ -21,8 +21,7 @@ static char THIS_FILE[] = __FILE__;
 CExplorer::CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, bool bIsCarringResource)
 {
 	m_ptBasePos = ptBasePos;
-	m_ptPos = ptPos;
-	m_ptOldPos = m_ptPos;
+	m_ptPos = m_ptLastResourcePos = m_ptOldPos = ptPos;
 	m_bIsCarringResource = bIsCarringResource;
 	m_pWorld = pWorld;
 }
@@ -33,34 +32,45 @@ CExplorer::~CExplorer()
 
 void CExplorer::Step()
 {
-	if (m_bIsCarringResource && AtTheBase())
+	// Returning to base if caring resource
+	if (m_bIsCarringResource)
 	{
-		m_bIsCarringResource = FALSE;
+		if (AtThePoint(m_ptBasePos))
+			{
+				m_bIsCarringResource = false;
+				m_bIsReturningToLast = true; 
+			}
+			else
+				MoveToPoint(m_ptBasePos);
+
 		return;
 	}
 
-	if (m_bIsCarringResource && !AtTheBase())
+	// Returning to where picked up resource
+	if (m_bIsReturningToLast)
 	{
-		MoveToBase();
+		AtThePoint(m_ptLastResourcePos) ? m_bIsReturningToLast = false : MoveToPoint(m_ptLastResourcePos);
 		return;
 	}
 
+	// Is there a resource nearby
 	if (DetectSample())
 	{
 		PickUpSample();
 		return;
 	}
 
+	// Nothing around - move along
 	Move();
 }
 
-BOOL CExplorer::AtTheBase()
+bool CExplorer::AtThePoint(const CPoint& pointTarget)
 {
-	if ((abs(m_ptPos.x - m_ptBasePos.x) <= 1) &&
-		(abs(m_ptPos.y - m_ptBasePos.y) <= 1))
-		return TRUE;
+	if ((abs(m_ptPos.x - pointTarget.x) <= 1) &&
+		(abs(m_ptPos.y - pointTarget.y) <= 1))
+		return true;
 	else
-		return FALSE;
+		return false;
 }
 
 int sign(int n)
@@ -71,10 +81,10 @@ int sign(int n)
 		return n / abs(n);
 }
 
-void CExplorer::MoveToBase()
+void CExplorer::MoveToPoint(const CPoint& pointTarget)
 {
-	int nOffsetX = m_ptBasePos.x - m_ptPos.x;
-	int nOffsetY = m_ptBasePos.y - m_ptPos.y;
+	int nOffsetX = pointTarget.x - m_ptPos.x;
+	int nOffsetY = pointTarget.y - m_ptPos.y;
 
 	m_ptOldPos = m_ptPos;
 
@@ -84,15 +94,21 @@ void CExplorer::MoveToBase()
 
 void CExplorer::PickUpSample()
 {
-	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) != 1)
-		ASSERT(FALSE);
+	if (m_bIsCarringResource)
+		return;
+
+	//if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) != 1)
+	//	ASSERT(FALSE);
+
 	m_bIsCarringResource = TRUE;
-	m_pWorld->SetAt(m_ptPos.x, m_ptPos.y, 0);
+	m_ptLastResourcePos = m_ptPos;
+
+	m_pWorld->SetAt(m_ptPos.x, m_ptPos.y, m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) - 1);
 }
 
 bool CExplorer::DetectSample()
 {
-	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) == 1)
+	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) > 0)
 		return TRUE;
 
 	return FALSE;
@@ -100,7 +116,7 @@ bool CExplorer::DetectSample()
 
 int Get_M1_0_P1()
 {
-	TRACE(_T("To use C++ rand DMTK"));
+	//TRACE(_T("To use C++11 rand DMTK"));	TODO TO DO
 
 	int ret = (int)floor((3 * rand() - 1) / RAND_MAX) - 1;
 	return ret;
@@ -126,7 +142,7 @@ void CExplorer::Move()
 		if (pt != pt2)
 			continue;
 
-		if (m_pWorld->GetAt(m_ptPos.x + XOffset, m_ptPos.y + YOffset) == 1)
+		if (m_pWorld->GetAt(m_ptPos.x + XOffset, m_ptPos.y + YOffset) > 0)
 		{
 			m_ptPos.x += XOffset;
 			m_ptPos.y += YOffset;
