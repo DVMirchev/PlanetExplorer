@@ -62,7 +62,7 @@ protected:
 #ifndef _DEBUG  // debug version in PlanerExplorerView.cpp
 inline CPlanerExplorerDoc* CPlanerExplorerView::GetDocument()
 {
-	return (CPlanerExplorerDoc*)m_pDocument;
+	return static_cast<CPlanerExplorerDoc*> (m_pDocument);
 }
 #endif
 

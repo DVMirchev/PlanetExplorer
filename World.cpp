@@ -132,10 +132,9 @@ void CWorld::InitWorld()
 {
 	int i = 0, j = 0;
 	m_ptBasePos = CPoint(MAX_WORLD_X / 2, MAX_WORLD_Y / 2);
-	CExplorer* pExplorer = NULL;
 	for (i = 0; i < gl_nExplorerNumber; i++)
 	{
-		pExplorer = new CExplorer(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, this);
+		auto pExplorer = new CExplorer(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, this);
 		m_vectExplorers.push_back(pExplorer);
 	}
 
