@@ -127,7 +127,7 @@ void CPlanerExplorerView::OnLoop()
 
 void CPlanerExplorerView::OnStep()
 {
-	(<CPlanerExplorerDoc*> (GetDocument()))->OnStep();
+	(static_cast<CPlanerExplorerDoc*> (GetDocument()))->OnStep();
 	m_bCallInitDraw = FALSE;
 	Invalidate(FALSE);
 }
@@ -140,8 +140,8 @@ void CPlanerExplorerView::OnStop()
 void CPlanerExplorerView::OnInit()
 {
 	KillTimer(m_nTimer);
-	srand(GetTickCount());
-	(<CPlanerExplorerDoc*> (GetDocument()))->OnInit();
+	srand((unsigned int) GetTickCount64());
+	(static_cast<CPlanerExplorerDoc*> (GetDocument()))->OnInit();
 	m_bCallInitDraw = TRUE;
 	Invalidate(FALSE);
 }
