@@ -140,7 +140,7 @@ void CPlanerExplorerView::OnStop()
 void CPlanerExplorerView::OnInit()
 {
 	KillTimer(m_nTimer);
-	srand(GetTickCount());
+	srand((unsigned int) GetTickCount64());
 	((CPlanerExplorerDoc*)GetDocument())->OnInit();
 	m_bCallInitDraw = TRUE;
 	Invalidate(FALSE);
