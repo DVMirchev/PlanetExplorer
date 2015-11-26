@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "WorldBase.h"
+#include <memory>
 
 class CExplorer;
 
@@ -19,7 +20,7 @@ public:
 
 	void CleanWorld() override;
 	void InitWorld() override;
-	void DrawExplorer(IExplorer* pExplorer, CDC* pDC) override;
+	void DrawExplorer(const std::unique_ptr<IExplorer>& pExplorer, CDC* pDC) override;
 	void Step() override;
 	void InitDraw(CDC* pdc) override;
 	void Draw(CDC* pDC, const bool& bInitDraw) override;
@@ -38,7 +39,7 @@ public:
 
 	int m_arrMatrix[MAX_WORLD_X][MAX_WORLD_Y];
 
-	std::vector<IExplorer*> m_vectExplorers;
+	std::vector<std::unique_ptr<IExplorer>> m_vectExplorers;
 	CPoint m_ptBasePos;
 };
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 class IExplorer;
 
 class IWorld
@@ -7,7 +9,7 @@ class IWorld
 public:
 	virtual void CleanWorld() = 0;
 	virtual void InitWorld() = 0;
-	virtual void DrawExplorer(IExplorer* pExplorer, CDC* pDC) = 0;
+	virtual void DrawExplorer( const std::unique_ptr<IExplorer>& pExplorer, CDC* pDC ) = 0;
 	virtual void Step() = 0;
 	virtual void InitDraw(CDC* pdc) = 0;
 	virtual void Draw(CDC* pDC, const bool& bInitDraw) = 0;

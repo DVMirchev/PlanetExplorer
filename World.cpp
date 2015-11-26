@@ -96,7 +96,7 @@ void CWorld::Step()
 	}
 }
 
-void CWorld::DrawExplorer(IExplorer *pExplorer, CDC *pDC)
+void CWorld::DrawExplorer(const std::unique_ptr<IExplorer>& pExplorer, CDC *pDC)
 {
 	COLORREF clrColor;
 	if (pExplorer->CarringResource())
@@ -134,8 +134,7 @@ void CWorld::InitWorld()
 	m_ptBasePos = CPoint(MAX_WORLD_X / 2, MAX_WORLD_Y / 2);
 	for (i = 0; i < gl_nExplorerNumber; i++)
 	{
-		auto pExplorer = new CExplorer(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, this);
-		m_vectExplorers.push_back(pExplorer);
+		m_vectExplorers.push_back(std::make_unique<CExplorer>(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, this));
 	}
 
 	for (i = 0; i < MAX_WORLD_X; i++)
@@ -148,12 +147,10 @@ void CWorld::InitWorld()
 	
 	for (i = 0; i < gl_nSamplesNumber; i++)
 	{
-
-		// TO DO TODO DMTK use C++ random generator
 		int XPos = (int) dist(mt);
 		int YPos = (int) dist(mt);
 
-		if ( YPos >= MAX_WORLD_Y || XPos > MAX_WORLD_X)
+		if ( YPos >= MAX_WORLD_Y || XPos >= MAX_WORLD_X)
 			continue;
 
 		m_arrMatrix[XPos][YPos] += 30;
@@ -164,8 +161,5 @@ void CWorld::InitWorld()
 
 void CWorld::CleanWorld()
 {
-	for (auto Explorer : m_vectExplorers)
-			delete Explorer;
-
 	m_vectExplorers.clear();
 }
