@@ -57,6 +57,8 @@ protected:
 	afx_msg void OnOptionsOptions();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in PlanerExplorerView.cpp

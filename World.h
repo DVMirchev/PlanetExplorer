@@ -12,30 +12,38 @@
 #include "WorldBase.h"
 #include <memory>
 
-class CExplorer;
+class IExplorer;
 
 class CWorld : public IWorld
 {
 public:
-
-	void CleanWorld() override;
-	void InitWorld() override;
-	void DrawExplorer(const std::unique_ptr<IExplorer>& pExplorer, CDC* pDC) override;
-	void Step() override;
-	void InitDraw(CDC* pdc) override;
-	void Draw(CDC* pDC, const bool& bInitDraw) override;
-	int GetAt(const int& nX, const int& nY) const override { return m_arrMatrix[nX][nY]; }
-	void SetAt(const int& nX, const int& nY, const int& nValue) override { m_arrMatrix[nX][nY] = max( 0, nValue); }
-
-public:
-	//void CleanWorld();
-	//void InitWorld();
-	//void DrawExplorer(CExplorer* pExplorer, CDC* pDC);
-	//void Step();
-	//void InitDraw(CDC* pdc);
-	//void Draw(CDC* pDC, BOOL bInitDraw);
 	CWorld();
 	virtual ~CWorld();
+
+public:
+
+	void CleanWorld() override;
+
+	void InitWorld() override;
+	void InitBase() override;
+	void InitResources() override;
+	void InitExplorers() override;
+
+	void DrawExplorer(const std::unique_ptr<IExplorer>& pExplorer, CDC* pDC) override;
+
+	void Step() override;
+
+	void InitDraw(CDC* pdc) override;
+	void Draw(CDC* pDC, const bool& bInitDraw) override;
+
+public:
+
+	void AddResource(int nXPos, int nYPos, int nAmount);
+	int GetAt(const int& nX, const int& nY) const override { return m_arrMatrix[nX][nY]; }
+	void SetAt(const int& nX, const int& nY, const int& nValue) override { m_arrMatrix[nX][nY] = max(0, nValue); }
+
+
+private:
 
 	int m_arrMatrix[MAX_WORLD_X][MAX_WORLD_Y];
 

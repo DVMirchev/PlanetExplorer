@@ -30,6 +30,11 @@ CWorld::~CWorld()
 	CleanWorld();
 }
 
+void CWorld::AddResource(int nXPos, int nYPos, int nAmount)
+{
+	m_arrMatrix[nXPos][nYPos] += nAmount;
+}
+
 void CWorld::Draw(CDC* pDC, const bool& bInitDraw)
 {
 	if (bInitDraw)
@@ -130,33 +135,48 @@ void CWorld::DrawExplorer(const std::unique_ptr<IExplorer>& pExplorer, CDC *pDC)
 
 void CWorld::InitWorld()
 {
-	int i = 0, j = 0;
+	InitExplorers();
+
+	InitBase();
+
+	InitResources();
+}
+
+void CWorld::InitBase()
+{
 	m_ptBasePos = CPoint(MAX_WORLD_X / 2, MAX_WORLD_Y / 2);
-	for (i = 0; i < gl_nExplorerNumber; i++)
+}
+
+void CWorld::InitResources()
+{
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(0.0, MAX_WORLD_Y);
+
+	for (int i = 0; i < gl_nSamplesNumber; i++)
+	{
+		int XPos = (int)dist(mt);
+		int YPos = (int)dist(mt);
+
+		if (YPos >= MAX_WORLD_Y || XPos >= MAX_WORLD_X)
+			continue;
+
+		AddResource(XPos, YPos, 30);
+	}
+
+	m_arrMatrix[m_ptBasePos.x][m_ptBasePos.y] = 2;
+}
+
+void CWorld::InitExplorers()
+{
+	for (int i = 0; i < gl_nExplorerNumber; i++)
 	{
 		m_vectExplorers.push_back(std::make_unique<CExplorer>(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, this));
 	}
 
-	for (i = 0; i < MAX_WORLD_X; i++)
-		for (j = 0; j < MAX_WORLD_X; j++)
+	for (int i = 0; i < MAX_WORLD_X; i++)
+		for (int j = 0; j < MAX_WORLD_X; j++)
 			m_arrMatrix[i][j] = 0;
-
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_real_distribution<double> dist(0.0, MAX_WORLD_Y);
-	
-	for (i = 0; i < gl_nSamplesNumber; i++)
-	{
-		int XPos = (int) dist(mt);
-		int YPos = (int) dist(mt);
-
-		if ( YPos >= MAX_WORLD_Y || XPos >= MAX_WORLD_X)
-			continue;
-
-		m_arrMatrix[XPos][YPos] += 30;
-	}
-
-	m_arrMatrix[m_ptBasePos.x][m_ptBasePos.y] = 2;
 }
 
 void CWorld::CleanWorld()

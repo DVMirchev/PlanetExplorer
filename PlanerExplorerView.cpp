@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CPlanerExplorerView, CView)
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@ BOOL CPlanerExplorerView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CPlanerExplorerView::OnDraw(CDC* pDC)
 {
-	CPlanerExplorerDoc* pDoc = GetDocument();
+	auto pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
 	if (!pDoc->m_bReadyToDraw)
@@ -127,7 +128,7 @@ void CPlanerExplorerView::OnLoop()
 
 void CPlanerExplorerView::OnStep()
 {
-	(static_cast<CPlanerExplorerDoc*> (GetDocument()))->OnStep();
+	GetDocument()->OnStep();
 	m_bCallInitDraw = FALSE;
 	Invalidate(FALSE);
 }
@@ -141,7 +142,7 @@ void CPlanerExplorerView::OnInit()
 {
 	KillTimer(m_nTimer);
 	srand((unsigned int) GetTickCount64());
-	(static_cast<CPlanerExplorerDoc*> (GetDocument()))->OnInit();
+	GetDocument()->OnInit();
 	m_bCallInitDraw = TRUE;
 	Invalidate(FALSE);
 }
@@ -155,4 +156,11 @@ void CPlanerExplorerView::OnOptionsOptions()
 		gl_nSamplesNumber = dlgOptions.m_nSamplesNumber;
 		gl_nExplorerNumber = dlgOptions.m_nExplorersNumber;
 	}
+}
+
+void CPlanerExplorerView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CView::OnLButtonUp(nFlags, point);
 }
