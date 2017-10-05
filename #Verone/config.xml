@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Verone xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <WorkingDir>S:\`Dimitko\`GitHUB\PlanetExplorer\#Verone</WorkingDir>
+  <Language>Cpp11</Language>
+  <ThreadsCount>1</ThreadsCount>
+  <IncludeDirs>
+    <IncludeDir>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt</IncludeDir>
+    <IncludeDir />
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\8.1\Include\um</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\8.1\Include\shared</IncludeDir>
+    <IncludeDir>C:\Program Files (x86)\Windows Kits\8.1\Include\winrt</IncludeDir>
+  </IncludeDirs>
+  <Files>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\Explorer.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\MainFrm.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\OptionDialog.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PileWorld.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PlanerExplorer.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PlanerExplorerDoc.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PlanerExplorerView.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\StatDialogBar.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\StdAfx.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\TraceExplorer.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\Explorer.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\ExplorerBase.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\MainFrm.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\OptionDialog.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PileWorld.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PlanerExplorer.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PlanerExplorerDoc.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\PlanerExplorerView.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\Resource.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\StatDialogBar.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\StdAfx.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\TraceExplorer.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\WorldBase.h</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\World.cpp</File>
+    <File>S:\`Dimitko\`GitHUB\PlanetExplorer\World.h</File>
+  </Files>
+</Verone>

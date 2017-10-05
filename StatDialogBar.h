@@ -4,7 +4,6 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-#include "resource.h"
 // StatDialogBar.h : header file
 //
 
@@ -13,7 +12,7 @@
 
 class CStatDialogBar : public CDialogBar
 {
-	// Construction
+// Construction
 public:
 	CStatDialogBar();   // standard constructor
 
@@ -24,10 +23,11 @@ public:
 	CString	m_strAverageMoves;
 	//}}AFX_DATA
 
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CStatDialogBar)
-protected:
+	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	//}}AFX_VIRTUAL
 

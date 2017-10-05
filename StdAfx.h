@@ -22,8 +22,9 @@
 
 #include <vector>
 
-const int MAX_WORLD_X = 100;
-const int MAX_WORLD_Y = 100;
+constexpr size_t MAX_WORLD_X = 200;
+constexpr size_t MAX_WORLD_Y = 200;
+
 extern int gl_nSamplesNumber;
 extern int gl_nExplorerNumber;
 //{{AFX_INSERT_LOCATION}}

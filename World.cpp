@@ -6,7 +6,8 @@
 #include "PlanerExplorer.h"
 #include "Explorer.h"
 #include "World.h"
-#include <random>
+
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -14,172 +15,135 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
-const int gl_nGridSize = 9;
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CWorld::CWorld()
-{
-	InitWorld();
+CWorld::CWorld() {
+    InitWorld();
 }
 
-CWorld::~CWorld()
-{
-	CleanWorld();
+CWorld::~CWorld() {
+    CleanWorld();
 }
 
-void CWorld::AddResource(int nXPos, int nYPos, int nAmount)
-{
-	m_arrMatrix[nXPos][nYPos] += nAmount;
-}
+#include "MainFrm.h"
+void CWorld::Draw(CDC *pDC, BOOL bInitDraw) {
+    if (bInitDraw)
+        InitDraw(pDC);
 
-void CWorld::Draw(CDC* pDC, const bool& bInitDraw)
-{
-	if (bInitDraw)
-		InitDraw(pDC);
-
-	// Set Status Bar Text
+    // Set Status Bar Text
 //	CString str;
 //	str.Format("bIsCarringSample: %d", m_pExplorer->m_bIsCarringResource );
 //	((CMainFrame*) AfxGetMainWnd())->m_wndStatusBar.SetPaneText( 1, str, TRUE );
-	//	pDC->TextOut(0, 0, str);
+    //	pDC->TextOut(0, 0, str);
 
-	// Draw Base
-	pDC->FillSolidRect((m_ptBasePos.x + 1) * gl_nGridSize + 1,
-		(m_ptBasePos.x + 1) * gl_nGridSize + 1,
-		4,
-		4,
-		RGB(255,
-			0,
-			0
-			)
-		);
 
-	for (const auto& Explorer : m_vectExplorers)
-	{
-		DrawExplorer(Explorer, pDC);
-	}
+    // Draw Base
+    pDC->FillSolidRect((m_ptBasePos.x + 1) * 5 + 1,
+        (m_ptBasePos.x + 1) * 5 + 1,
+        4,
+        4,
+        RGB(255,
+            0,
+            0
+        )
+    );
+
+
+    for (const auto& explorer : m_vectExplorers) {
+        DrawExplorer(explorer, pDC);
+    }
+
 }
 
-void CWorld::InitDraw(CDC *pDC)
-{
-	int i;
-	int j;
-	int car;
+void CWorld::InitDraw(CDC *pDC) {
+    for (int i = 0; i < MAX_WORLD_X; i++)
+        for (int j = 0; j < MAX_WORLD_X; j++) {
+            const auto car = m_arrMatrix[i][j];
+            pDC->FillSolidRect((i + 1) * 5,
+                (j + 1) * 5,
+                5,
+                5,
+                RGB(255 - 100 * car,
+                    255 - 100 * car,
+                    255 - 100 * car
+                )
+            );
+        }
 
-	for (i = 0; i < MAX_WORLD_X; i++)
-		for (j = 0; j < MAX_WORLD_X; j++)
-		{
-			car = max( 0, m_arrMatrix[i][j] == 0 ? 255 : 127 - 5 * m_arrMatrix[i][j]);
-			pDC->FillSolidRect((i + 1) * gl_nGridSize,
-				(j + 1) * gl_nGridSize,
-				gl_nGridSize,
-				gl_nGridSize,
-				RGB(car, car, car)
-				);
-		}
+    for (int i = 1; i < MAX_WORLD_X + 2; i++) {
+        CPen pen(PS_SOLID, 1, RGB(210, 210, 210));
+        CPen* ppenOld = pDC->SelectObject(&pen);
+        pDC->MoveTo(i * 5, 5);
+        pDC->LineTo(i * 5, (MAX_WORLD_X + 1) * 5);
+        pDC->MoveTo(5, i * 5);
+        pDC->LineTo((MAX_WORLD_Y + 1) * 5, i * 5);
+        pDC->SelectObject(ppenOld);
+    }
 
-	for (i = 1; i < MAX_WORLD_X + 2; i++)
-	{
-		CPen pen(PS_SOLID, 1, RGB(210, 210, 210));
-		CPen* ppenOld = pDC->SelectObject(&pen);
-		pDC->MoveTo(i * gl_nGridSize, gl_nGridSize);
-		pDC->LineTo(i * gl_nGridSize, (MAX_WORLD_X + 1) * gl_nGridSize);
-		pDC->MoveTo(gl_nGridSize, i * gl_nGridSize);
-		pDC->LineTo((MAX_WORLD_Y + 1) * gl_nGridSize, i * gl_nGridSize);
-		pDC->SelectObject(ppenOld);
-	}
+
 }
 
-void CWorld::Step()
-{
-	for (const auto& Explorer : m_vectExplorers)
-	{
-		Explorer->Step();
-	}
+void CWorld::Step() {
+    for (auto& explorer : m_vectExplorers) {
+        explorer->Step();
+    }
 }
 
-void CWorld::DrawExplorer(const std::unique_ptr<IExplorer>& pExplorer, CDC *pDC)
-{
-	COLORREF clrColor;
-	if (pExplorer->CarringResource())
-		clrColor = RGB(0, 255, 0);
-	else
-		if (pExplorer->Returning())
-			clrColor = RGB(255, 0, 0);
-		else
-			clrColor = RGB(0, 0, 255);
+void CWorld::DrawExplorer(const std::unique_ptr<CExplorer>& pExplorer, CDC *pDC) {
+    const COLORREF clrColor = [&]() {
+        if (pExplorer->m_bIsCarringResource)
+            return RGB(0, 0, 0);
+        else
+            return RGB(0, 0, 255);
+    }();
 
-	COLORREF clrUnderColor;
-	if (m_arrMatrix[pExplorer->GetOldPossition().x][pExplorer->GetOldPossition().y])
-		clrUnderColor = RGB(155, 155, 155);
-	else
-		clrUnderColor = RGB(255, 255, 255);
 
-	pDC->FillSolidRect((pExplorer->GetOldPossition().x + 1) * gl_nGridSize + 1,
-		(pExplorer->GetOldPossition().y + 1) * gl_nGridSize + 1,
-		gl_nGridSize - 1,
-		gl_nGridSize - 1,
-		clrUnderColor
-		);
+    const COLORREF clrUnderColor = [&]() {
+        if (m_arrMatrix[pExplorer->m_ptOldPos.x][pExplorer->m_ptOldPos.y])
+            return RGB(155, 155, 155);
+        else
+            return RGB(255, 255, 255);
+    }();
 
-	pDC->FillSolidRect((pExplorer->GetPossition().x + 1) * gl_nGridSize + 1,
-		(pExplorer->GetPossition().y + 1) * gl_nGridSize + 1,
-		gl_nGridSize - 1,
-		gl_nGridSize - 1,
-		clrColor
-		);
+    pDC->FillSolidRect((pExplorer->m_ptOldPos.x + 1) * 5 + 1,
+        (pExplorer->m_ptOldPos.y + 1) * 5 + 1,
+        4,
+        4,
+        clrUnderColor
+    );
+
+    pDC->FillSolidRect((pExplorer->m_ptPos.x + 1) * 5 + 1,
+        (pExplorer->m_ptPos.y + 1) * 5 + 1,
+        4,
+        4,
+        clrColor
+    );
+
 }
 
-void CWorld::InitWorld()
-{
-	InitExplorers();
+void CWorld::InitWorld() {
+    m_ptBasePos = CPoint(MAX_WORLD_X / 2, MAX_WORLD_Y / 2);
+    for (int i = 0; i < gl_nExplorerNumber; i++) {
+        m_vectExplorers.push_back(std::make_unique<CExplorer>(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, *this));
+    }
 
-	InitBase();
+    for (int i = 0; i < MAX_WORLD_X; i++)
+        for (int j = 0; j < MAX_WORLD_X; j++)
+            m_arrMatrix[i][j] = 0;
 
-	InitResources();
+    for (int i = 0; i < gl_nSamplesNumber; i++) {
+        int XPos = std::clamp<int>(0, static_cast<int>((MAX_WORLD_X - 1)* (((float) rand()) / ((float) RAND_MAX))), MAX_WORLD_X - 1);
+        int YPos = std::clamp<int>(0, static_cast<int>((MAX_WORLD_Y - 1) * (((float) rand()) / ((float) RAND_MAX))), MAX_WORLD_Y - 1);
+
+        m_arrMatrix[XPos][YPos] = 1;
+
+    }
+
+    m_arrMatrix[m_ptBasePos.x][m_ptBasePos.y] = 2;
 }
 
-void CWorld::InitBase()
-{
-	m_ptBasePos = CPoint(MAX_WORLD_X / 2, MAX_WORLD_Y / 2);
-}
-
-void CWorld::InitResources()
-{
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_real_distribution<double> dist(0.0, MAX_WORLD_Y);
-
-	for (int i = 0; i < gl_nSamplesNumber; i++)
-	{
-		int XPos = (int)dist(mt);
-		int YPos = (int)dist(mt);
-
-		if (YPos >= MAX_WORLD_Y || XPos >= MAX_WORLD_X)
-			continue;
-
-		AddResource(XPos, YPos, 30);
-	}
-
-	m_arrMatrix[m_ptBasePos.x][m_ptBasePos.y] = 2;
-}
-
-void CWorld::InitExplorers()
-{
-	for (int i = 0; i < gl_nExplorerNumber; i++)
-	{
-		m_vectExplorers.push_back(std::make_unique<CExplorer>(CPoint(m_ptBasePos.x + 1, m_ptBasePos.y + 1), m_ptBasePos, this));
-	}
-
-	for (int i = 0; i < MAX_WORLD_X; i++)
-		for (int j = 0; j < MAX_WORLD_X; j++)
-			m_arrMatrix[i][j] = 0;
-}
-
-void CWorld::CleanWorld()
-{
-	m_vectExplorers.clear();
+void CWorld::CleanWorld() {
+    m_vectExplorers.clear();
 }

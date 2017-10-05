@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Verone>
+	<Diagnostics>
+		<Diagnostic>
+			<Message>It's not recommended to call virtual methods in constructor. Because, it may cause runtime errors</Message>
+			<Type>Warning</Type>
+			<Locations>
+				<Location>
+					<File>S:\`Dimitko\`GitHUB\PlanetExplorer\World.cpp</File>
+					<Line>25</Line>
+					<Column>2</Column>
+				</Location>
+			</Locations>
+		</Diagnostic>
+	</Diagnostics>
+</Verone>

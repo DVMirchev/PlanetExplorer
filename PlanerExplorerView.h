@@ -9,26 +9,28 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+
+
 class CPlanerExplorerView : public CView
 {
 protected: // create from serialization only
 	CPlanerExplorerView();
 	DECLARE_DYNCREATE(CPlanerExplorerView)
 
-	// Attributes
+// Attributes
 public:
 	CPlanerExplorerDoc* GetDocument();
 
-	// Operations
+// Operations
 public:
 
-	// Overrides
-		// ClassWizard generated virtual function overrides
-		//{{AFX_VIRTUAL(CPlanerExplorerView)
-public:
+// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(CPlanerExplorerView)
+	public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-protected:
+	protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
@@ -44,12 +46,12 @@ public:
 
 protected:
 
-	// Generated message map functions
+// Generated message map functions
 protected:
-	bool m_bCallInitDraw;
-	int m_nTimer;
+	BOOL m_bCallInitDraw;
+	UINT_PTR m_nTimer;
 	//{{AFX_MSG(CPlanerExplorerView)
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnLoop();
 	afx_msg void OnStep();
 	afx_msg void OnStop();
@@ -57,15 +59,11 @@ protected:
 	afx_msg void OnOptionsOptions();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in PlanerExplorerView.cpp
 inline CPlanerExplorerDoc* CPlanerExplorerView::GetDocument()
-{
-	return static_cast<CPlanerExplorerDoc*> (m_pDocument);
-}
+   { return (CPlanerExplorerDoc*)m_pDocument; }
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

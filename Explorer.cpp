@@ -8,163 +8,140 @@
 #include "World.h"
 #include "math.h"
 
+#include <array>
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
+namespace {
+
+    int sign(int n) {
+        if (n == 0)
+            return 0;
+        else
+            return n / abs(n);
+    }
+
+    int Get_M1_0_P1() {
+        auto rand_int = rand();
+        if (rand_int < RAND_MAX / 3)
+            return -1;
+        else
+            if (rand_int < (RAND_MAX / 3) * 2)
+                return 0;
+            else
+                return 1;
+    }
+
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CExplorer::CExplorer(CPoint ptPos, CPoint ptBasePos, IWorld* pWorld, bool bIsCarringResource)
-{
-	m_ptBasePos = ptBasePos;
-	m_ptPos = m_ptLastResourcePos = m_ptOldPos = ptPos;
-	m_bIsCarringResource = bIsCarringResource;
-	m_pWorld = pWorld;
+CExplorer::CExplorer(const CPoint& ptPos, const CPoint& ptBasePos, CWorld& pWorld, const BOOL bIsCarringResource) :
+    m_ptBasePos{ ptBasePos },
+    m_ptPos{ ptPos },
+    m_ptOldPos{ m_ptPos },
+    m_bIsCarringResource{ bIsCarringResource },
+    m_pWorld{ pWorld } {
 }
 
-CExplorer::~CExplorer()
-{
+void CExplorer::Step() {
+    if (m_bIsCarringResource && AtTheBase()) {
+        m_bIsCarringResource = FALSE;
+        return;
+    }
+
+    if (m_bIsCarringResource && !AtTheBase()) {
+        MoveToBase();
+        return;
+    }
+
+    if (DetectSample()) {
+        PickUpSample();
+        return;
+    }
+
+    Move();
+
 }
 
-void CExplorer::Step()
-{
-	// Returning to base if caring resource
-	if (m_bIsCarringResource)
-	{
-		if (AtThePoint(m_ptBasePos))
-			{
-				m_bIsCarringResource = false;
-				m_bIsReturningToLast = true; 
-			}
-			else
-				MoveToPoint(m_ptBasePos);
-
-		return;
-	}
-
-	// Returning to where picked up resource
-	if (m_bIsReturningToLast)
-	{
-		AtThePoint(m_ptLastResourcePos) ? m_bIsReturningToLast = false : MoveToPoint(m_ptLastResourcePos);
-		return;
-	}
-
-	// Is there a resource nearby
-	if (DetectSample())
-	{
-		PickUpSample();
-		return;
-	}
-
-	// Nothing around - move along
-	Move();
+bool CExplorer::AtTheBase() {
+    if ((abs(m_ptPos.x - m_ptBasePos.x) <= 1) &&
+        (abs(m_ptPos.y - m_ptBasePos.y) <= 1))
+        return true;
+    else
+        return false;
 }
 
-bool CExplorer::AtThePoint(const CPoint& pointTarget)
-{
-	if ((abs(m_ptPos.x - pointTarget.x) <= 1) &&
-		(abs(m_ptPos.y - pointTarget.y) <= 1))
-		return true;
-	else
-		return false;
+void CExplorer::MoveToBase() {
+    int nOffsetX = m_ptBasePos.x - m_ptPos.x;
+    int nOffsetY = m_ptBasePos.y - m_ptPos.y;
+
+    m_ptOldPos = m_ptPos;
+
+    m_ptPos.x += sign(nOffsetX);
+    m_ptPos.y += sign(nOffsetY);
 }
 
-int sign(int n)
-{
-	if (n == 0)
-		return 0;
-	else
-		return n / abs(n);
+void CExplorer::PickUpSample() {
+    if (m_pWorld.m_arrMatrix[m_ptPos.x][m_ptPos.y] != 1)
+        ASSERT(FALSE);
+    m_bIsCarringResource = TRUE;
+    m_pWorld.m_arrMatrix[m_ptPos.x][m_ptPos.y] = 0;
 }
 
-void CExplorer::MoveToPoint(const CPoint& pointTarget)
-{
-	int nOffsetX = pointTarget.x - m_ptPos.x;
-	int nOffsetY = pointTarget.y - m_ptPos.y;
-
-	m_ptOldPos = m_ptPos;
-
-	m_ptPos.x += sign(nOffsetX);
-	m_ptPos.y += sign(nOffsetY);
+BOOL CExplorer::DetectSample() {
+    if (m_pWorld.m_arrMatrix[m_ptPos.x][m_ptPos.y] == 1)
+        return TRUE;
+    return FALSE;
 }
 
-void CExplorer::PickUpSample()
-{
-	if (m_bIsCarringResource)
-		return;
+void CExplorer::Move() {
+    m_ptOldPos = m_ptPos;
+    std::array< std::array<int, 3>, 3> arrXPos = { {0, 0, 0} };
 
-	//if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) != 1)
-	//	ASSERT(FALSE);
+    do {
+        int XOffset = Get_M1_0_P1();
+        int YOffset = Get_M1_0_P1();
 
-	m_bIsCarringResource = TRUE;
-	m_ptLastResourcePos = m_ptPos;
+        if (arrXPos[XOffset + 1][YOffset + 1] == 1)
+            continue;
+        else
+            arrXPos[XOffset + 1][YOffset + 1] = 1;
 
-	m_pWorld->SetAt(m_ptPos.x, m_ptPos.y, m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) - 1);
+        CPoint pt(m_ptPos.x + XOffset, m_ptPos.y + YOffset);
+        CPoint pt2 = pt;
+        MakeInWorld(pt);
+        if (pt != pt2)
+            continue;
+
+        if (m_pWorld.m_arrMatrix[m_ptPos.x + XOffset][m_ptPos.y + YOffset] == 1) {
+            m_ptPos.x += XOffset;
+            m_ptPos.y += YOffset;
+            return;
+        }
+
+    } while ((arrXPos[0][0] == 1) && (arrXPos[1][0] == 1) && (arrXPos[2][0] == 1) &&
+            (arrXPos[0][1] == 1) && (arrXPos[1][1] == 1) && (arrXPos[2][1] == 1) &&
+            (arrXPos[0][2] == 1) && (arrXPos[1][2] == 1) && (arrXPos[2][2] == 1));
+
+    int XOffset = Get_M1_0_P1();
+    int YOffset = Get_M1_0_P1();
+
+    m_ptPos.x += XOffset;
+    m_ptPos.y += YOffset;
+
+    MakeInWorld(m_ptPos);
 }
 
-bool CExplorer::DetectSample()
-{
-	if (m_pWorld->GetAt(m_ptPos.x, m_ptPos.y) > 0)
-		return TRUE;
-
-	return FALSE;
-}
-
-int Get_M1_0_P1()
-{
-	//TRACE(_T("To use C++11 rand DMTK"));	TODO TO DO
-
-	int ret = (int)floor((3 * rand() - 1) / RAND_MAX) - 1;
-	return ret;
-}
-
-void CExplorer::Move()
-{
-	m_ptOldPos = m_ptPos;
-	int arrXPos[3][3] = { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} };
-
-	do
-	{
-		int XOffset = Get_M1_0_P1();
-		int YOffset = Get_M1_0_P1();
-		if (arrXPos[XOffset + 1][YOffset + 1] == 1)
-			continue;
-		else
-			arrXPos[XOffset + 1][YOffset + 1] = 1;
-
-		CPoint pt(m_ptPos.x + XOffset, m_ptPos.y + YOffset);
-		CPoint pt2 = pt;
-		MakeInWorld(pt);
-		if (pt != pt2)
-			continue;
-
-		if (m_pWorld->GetAt(m_ptPos.x + XOffset, m_ptPos.y + YOffset) > 0)
-		{
-			m_ptPos.x += XOffset;
-			m_ptPos.y += YOffset;
-			return;
-		}
-	} while (	(arrXPos[0][0] == 1) && (arrXPos[1][0] == 1) && (arrXPos[2][0] == 1) &&
-						(arrXPos[0][1] == 1) && (arrXPos[1][1] == 1) && (arrXPos[2][1] == 1) &&
-						(arrXPos[0][2] == 1) && (arrXPos[1][2] == 1) && (arrXPos[2][2] == 1));
-
-	int XOffset = Get_M1_0_P1();
-	int YOffset = Get_M1_0_P1();
-
-	m_ptPos.x += XOffset;
-	m_ptPos.y += YOffset;
-
-	MakeInWorld(m_ptPos);
-}
-
-void CExplorer::MakeInWorld(CPoint& pt)
-{
-	if (pt.x < 0) pt.x = 0;
-	if (pt.x > MAX_WORLD_X - 1) pt.x = MAX_WORLD_X - 1;
-	if (pt.y < 0) pt.y = 0;
-	if (pt.y > MAX_WORLD_Y - 1) pt.y = MAX_WORLD_Y - 1;
+void CExplorer::MakeInWorld(CPoint& pt) {
+    if (pt.x < 0) pt.x = 0;
+    if (pt.x > MAX_WORLD_X - 1) pt.x = MAX_WORLD_X - 1;
+    if (pt.y < 0) pt.y = 0;
+    if (pt.y > MAX_WORLD_Y - 1) pt.y = MAX_WORLD_Y - 1;
 }

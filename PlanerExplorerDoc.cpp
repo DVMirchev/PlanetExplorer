@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "PlanerExplorer.h"
+#include "PlanerExplorer.h"	  
 #include "Explorer.h"
 #include "PlanerExplorerDoc.h"
 
@@ -45,6 +45,8 @@ BOOL CPlanerExplorerDoc::OnNewDocument()
 	return TRUE;
 }
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerDoc serialization
 
@@ -78,14 +80,14 @@ void CPlanerExplorerDoc::Dump(CDumpContext& dc) const
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerDoc commands
 
-void CPlanerExplorerDoc::OnInit()
+void CPlanerExplorerDoc::OnInit() 
 {
 	m_bReadyToDraw = TRUE;
 	m_World.CleanWorld();
 	m_World.InitWorld();
 }
 
-void CPlanerExplorerDoc::OnStep()
+void CPlanerExplorerDoc::OnStep() 
 {
 	m_World.Step();
 }
