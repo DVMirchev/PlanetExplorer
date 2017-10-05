@@ -2,19 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{c03ff631-507d-4e0d-b586-14fef22e28fe}</UniqueIdentifier>
+      <UniqueIdentifier>{895ca473-5cb8-45bf-9826-c40ee1ac3695}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{2ce163a4-eaeb-4e05-8fa1-e304f0cc45a3}</UniqueIdentifier>
+      <UniqueIdentifier>{2b1e273c-b940-482f-b4aa-2c5f46ee633e}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{3370642c-3716-49e3-bb9b-23e908c5ad61}</UniqueIdentifier>
+      <UniqueIdentifier>{02096876-b09e-46ec-9f77-5398e6ce7065}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
-    </Filter>
-    <Filter Include="dmtk">
-      <UniqueIdentifier>{6e44e332-a796-4dc1-aac1-23286f47705c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,9 +22,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OptionDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PileWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlanerExplorer.cpp">
@@ -45,11 +39,8 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TraceExplorer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="World.cpp">
-      <Filter>dmtk</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,16 +52,10 @@
     <ClInclude Include="Explorer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExplorerBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MainFrm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OptionDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PileWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlanerExplorer.h">
@@ -91,14 +76,8 @@
     <ClInclude Include="StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TraceExplorer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="World.h">
-      <Filter>dmtk</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,12 +90,17 @@
     <Image Include="res\Toolbar.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="mainfram.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\PlanerExplorer.rc2">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="packages.config" />
+    <None Include="res\PlanerExplorer.rc2.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

@@ -12,7 +12,7 @@
 
 class COptionDialog : public CDialog
 {
-	// Construction
+// Construction
 public:
 	COptionDialog(int nSamplesNumber, int nExplorersNumber, CWnd* pParent = NULL);   // standard constructor
 
@@ -23,10 +23,11 @@ public:
 	int		m_nExplorersNumber;
 	//}}AFX_DATA
 
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(COptionDialog)
-protected:
+	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	//}}AFX_VIRTUAL
 

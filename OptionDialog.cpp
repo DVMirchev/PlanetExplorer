@@ -14,6 +14,7 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // COptionDialog dialog
 
+
 COptionDialog::COptionDialog(int nSamplesNumber, int nExplorersNumber, CWnd* pParent /*=NULL*/)
 	: CDialog(COptionDialog::IDD, pParent)
 {
@@ -23,6 +24,7 @@ COptionDialog::COptionDialog(int nSamplesNumber, int nExplorersNumber, CWnd* pPa
 	//}}AFX_DATA_INIT
 }
 
+
 void COptionDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
@@ -31,6 +33,7 @@ void COptionDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EXPLORERS, m_nExplorersNumber);
 	//}}AFX_DATA_MAP
 }
+
 
 BEGIN_MESSAGE_MAP(COptionDialog, CDialog)
 	//{{AFX_MSG_MAP(COptionDialog)

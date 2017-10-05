@@ -36,32 +36,28 @@ static UINT indicators[] =
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame construction/destruction
 
-CMainFrame::CMainFrame()
-{
+CMainFrame::CMainFrame() {
 	// TODO: add member initialization code here
+
 }
 
-CMainFrame::~CMainFrame()
-{
+CMainFrame::~CMainFrame() {
 }
 
-int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{
+int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_RIGHT
 		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
-		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
-	{
+		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME)) {
 		TRACE0("Failed to create toolbar\n");
 		return -1;      // fail to create
 	}
 
 	if (!m_wndStatusBar.Create(this) ||
 		!m_wndStatusBar.SetIndicators(indicators,
-			sizeof(indicators) / sizeof(UINT)))
-	{
+			sizeof(indicators) / sizeof(UINT))) {
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create
 	}
@@ -77,8 +73,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
-{
+BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs) {
+
 	cs.cx = 605;
 	cs.cy = 585;
 	if (!CFrameWnd::PreCreateWindow(cs))
@@ -93,13 +89,11 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 // CMainFrame diagnostics
 
 #ifdef _DEBUG
-void CMainFrame::AssertValid() const
-{
+void CMainFrame::AssertValid() const {
 	CFrameWnd::AssertValid();
 }
 
-void CMainFrame::Dump(CDumpContext& dc) const
-{
+void CMainFrame::Dump(CDumpContext& dc) const {
 	CFrameWnd::Dump(dc);
 }
 
@@ -107,3 +101,4 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame message handlers
+

@@ -20,147 +20,123 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CPlanerExplorerView, CView)
 
 BEGIN_MESSAGE_MAP(CPlanerExplorerView, CView)
-	//{{AFX_MSG_MAP(CPlanerExplorerView)
-	ON_WM_TIMER()
-	ON_COMMAND(ID_LOOP, OnLoop)
-	ON_COMMAND(ID_STEP, OnStep)
-	ON_COMMAND(ID_STOP, OnStop)
-	ON_COMMAND(ID_INIT, OnInit)
-	ON_COMMAND(ID_OPTIONS_OPTIONS, OnOptionsOptions)
-	//}}AFX_MSG_MAP
-	// Standard printing commands
-	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
-	ON_WM_LBUTTONUP()
+    //{{AFX_MSG_MAP(CPlanerExplorerView)
+    ON_WM_TIMER()
+    ON_COMMAND(ID_LOOP, OnLoop)
+    ON_COMMAND(ID_STEP, OnStep)
+    ON_COMMAND(ID_STOP, OnStop)
+    ON_COMMAND(ID_INIT, OnInit)
+    ON_COMMAND(ID_OPTIONS_OPTIONS, OnOptionsOptions)
+    //}}AFX_MSG_MAP
+    // Standard printing commands
+    ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
+    ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
+    ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerView construction/destruction
 
-CPlanerExplorerView::CPlanerExplorerView()
-{
-	m_bCallInitDraw = TRUE;
+CPlanerExplorerView::CPlanerExplorerView() {
+    m_bCallInitDraw = TRUE;
+
 }
 
-CPlanerExplorerView::~CPlanerExplorerView()
-{
+CPlanerExplorerView::~CPlanerExplorerView() {
 }
 
-BOOL CPlanerExplorerView::PreCreateWindow(CREATESTRUCT& cs)
-{
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+BOOL CPlanerExplorerView::PreCreateWindow(CREATESTRUCT& cs) {
+    // TODO: Modify the Window class or styles here by modifying
+    //  the CREATESTRUCT cs
 
-	return CView::PreCreateWindow(cs);
+    return CView::PreCreateWindow(cs);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerView drawing
 
-void CPlanerExplorerView::OnDraw(CDC* pDC)
-{
-	auto pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
+void CPlanerExplorerView::OnDraw(CDC* pDC) {
+    CPlanerExplorerDoc* pDoc = GetDocument();
+    ASSERT_VALID(pDoc);
 
-	if (!pDoc->m_bReadyToDraw)
-		return;
+    if (!pDoc->m_bReadyToDraw)
+        return;
 
-	pDoc->m_World.Draw(pDC, m_bCallInitDraw);
+    pDoc->m_World.Draw(pDC, m_bCallInitDraw);
 
-	m_bCallInitDraw = TRUE;
+    m_bCallInitDraw = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerView printing
 
-BOOL CPlanerExplorerView::OnPreparePrinting(CPrintInfo* pInfo)
-{
-	// default preparation
-	return DoPreparePrinting(pInfo);
+BOOL CPlanerExplorerView::OnPreparePrinting(CPrintInfo* pInfo) {
+    // default preparation
+    return DoPreparePrinting(pInfo);
 }
 
-void CPlanerExplorerView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-	// TODO: add extra initialization before printing
+void CPlanerExplorerView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {
+    // TODO: add extra initialization before printing
 }
 
-void CPlanerExplorerView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-	// TODO: add cleanup after printing
+void CPlanerExplorerView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {
+    // TODO: add cleanup after printing
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerView diagnostics
 
 #ifdef _DEBUG
-void CPlanerExplorerView::AssertValid() const
-{
-	CView::AssertValid();
+void CPlanerExplorerView::AssertValid() const {
+    CView::AssertValid();
 }
 
-void CPlanerExplorerView::Dump(CDumpContext& dc) const
-{
-	CView::Dump(dc);
+void CPlanerExplorerView::Dump(CDumpContext& dc) const {
+    CView::Dump(dc);
 }
 
 CPlanerExplorerDoc* CPlanerExplorerView::GetDocument() // non-debug version is inline
 {
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CPlanerExplorerDoc)));
-	return (CPlanerExplorerDoc*)m_pDocument;
+    ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CPlanerExplorerDoc)));
+    return (CPlanerExplorerDoc*) m_pDocument;
 }
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
 // CPlanerExplorerView message handlers
 
-void CPlanerExplorerView::OnTimer(UINT nIDEvent)
-{
-	OnStep();
+void CPlanerExplorerView::OnTimer(UINT_PTR nIDEvent) {
+    OnStep();
 
-	CView::OnTimer(nIDEvent);
+    CView::OnTimer(nIDEvent);
 }
 
-void CPlanerExplorerView::OnLoop()
-{
-	m_nTimer = SetTimer(1, 50, 0);
+void CPlanerExplorerView::OnLoop() {
+    m_nTimer = SetTimer(1, 1, 0);
 }
 
-void CPlanerExplorerView::OnStep()
-{
-	GetDocument()->OnStep();
-	m_bCallInitDraw = FALSE;
-	Invalidate(FALSE);
+void CPlanerExplorerView::OnStep() {
+    ((CPlanerExplorerDoc*) GetDocument())->OnStep();
+    m_bCallInitDraw = FALSE;
+    Invalidate(FALSE);
 }
 
-void CPlanerExplorerView::OnStop()
-{
-	KillTimer(m_nTimer);
+void CPlanerExplorerView::OnStop() {
+    KillTimer(m_nTimer);
 }
 
-void CPlanerExplorerView::OnInit()
-{
-	KillTimer(m_nTimer);
-	srand((unsigned int) GetTickCount64());
-	GetDocument()->OnInit();
-	m_bCallInitDraw = TRUE;
-	Invalidate(FALSE);
+void CPlanerExplorerView::OnInit() {
+    srand(GetTickCount());
+    ((CPlanerExplorerDoc*) GetDocument())->OnInit();
+    m_bCallInitDraw = TRUE;
+    Invalidate(FALSE);
 }
 
-void CPlanerExplorerView::OnOptionsOptions()
-{
-	COptionDialog dlgOptions(gl_nSamplesNumber, gl_nExplorerNumber);
+void CPlanerExplorerView::OnOptionsOptions() {
+    COptionDialog dlgOptions(gl_nSamplesNumber, gl_nExplorerNumber);
 
-	if (dlgOptions.DoModal() == IDOK)
-	{
-		gl_nSamplesNumber = dlgOptions.m_nSamplesNumber;
-		gl_nExplorerNumber = dlgOptions.m_nExplorersNumber;
-	}
-}
-
-void CPlanerExplorerView::OnLButtonUp(UINT nFlags, CPoint point)
-{
-	// TODO: Add your message handler code here and/or call default
-
-	CView::OnLButtonUp(nFlags, point);
+    if (dlgOptions.DoModal() == IDOK) {
+        gl_nSamplesNumber = dlgOptions.m_nSamplesNumber;
+        gl_nExplorerNumber = dlgOptions.m_nExplorersNumber;
+    }
 }
